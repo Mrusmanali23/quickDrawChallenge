@@ -18,18 +18,17 @@ class QuickDrawDataset(Dataset):
     return len(self.images)
 
   def __getitem__(self, idx):
-    # HOW: This method fetches a single sample by its index `idx`
     image = self.images[idx]
     label = self.labels[idx]
 
-    # Preprocessing:
-    # 1. Reshape image from (28, 28) to (1, 28, 28) -> PyTorch CNNs expect a channel dimension (Channels, Height, Width)
-    # 2. Normalize pixel values from [0, 255] to [0.0, 1.0] by dividing by 255.0
-    image = (
-        torch.tensor(image, dtype=torch.float32).unsqueeze(0) / 255.0
-    )  # unsqueeze(0) adds the channel dim
+    # FIX: If the image is flattened (784 elements), reshape it back to (28, 28)
+    if image.shape == (784,):
+      image = image.reshape(28, 28)
 
-    # Convert label to a torch integer tensor
+    # Preprocessing:
+    # 1. Reshape image from (28, 28) to (1, 28, 28) -> PyTorch CNNs expect (Channels, Height, Width)
+    # 2. Normalize pixel values from [0, 255] to [0.0, 1.0]
+    image = torch.tensor(image, dtype=torch.float32).unsqueeze(0) / 255.0
     label = torch.tensor(label, dtype=torch.long)
 
     return image, label

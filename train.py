@@ -31,7 +31,7 @@ def train_model():
   )  # Adjusts weights efficiently
 
   # 4. Training Loop Execution
-  num_epochs = 3  # Start with 3 epochs to test training speed on your laptop
+  num_epochs = 10  # Start with 3 epochs to test training speed on your laptop
   print(
       f'Starting training for {num_epochs} epochs on {len(train_dataset)}'
       ' samples...'
