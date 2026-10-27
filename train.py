@@ -14,7 +14,7 @@ def train_model():
 
   # 2. Load Dataset & Dataloader (uses your dataset.py)
   print('Loading datasets into memory...')
-  train_dataset = QuickDrawDataset('train_images.npy', 'train_labels.npy')
+  train_dataset = QuickDrawDataset('data/train_images.npy', 'labels/train_labels.npy')
 
   batch_size = 128  # Number of images processed simultaneously in VRAM
   train_loader = DataLoader(
