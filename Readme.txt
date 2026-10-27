@@ -41,3 +41,8 @@ Loss Calculation= Cross Entropy Loss(Compares the model's prediction against the
 Backward Pass= Calculates gradients
 Optimizer= Updates the model weights to make fewer mistakes next time.
 
+First Evaluation completed:103500 total samples 
+Top-1 Accuracy=53.86%
+Top-5 Accuracy=73.48%
+
+
