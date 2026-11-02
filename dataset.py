@@ -2,7 +2,7 @@ import numpy as np
 import torch
 from torch.utils.data import DataLoader, Dataset
 
-
+import torchvision.transforms as transforms
 # 1. Create a Custom PyTorch Dataset Class
 # WHY: PyTorch needs a structured way to fetch one image-label pair at a time.
 class QuickDrawDataset(Dataset):
