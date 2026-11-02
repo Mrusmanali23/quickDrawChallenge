@@ -7,32 +7,46 @@ from torch.utils.data import DataLoader, Dataset
 # WHY: PyTorch needs a structured way to fetch one image-label pair at a time.
 class QuickDrawDataset(Dataset):
 
-  def __init__(self, images_path, labels_path):
-    # Load data from .npy files into memory
+  def __init__(self, images_path, labels_path, is_train=False):
     print(f'Loading data from {images_path}...')
     self.images = np.load(images_path)
     self.labels = np.load(labels_path)
+    self.is_train = is_train
+
+    # Define professional augmentation pipeline for training data
+    # Quick, Draw! doodles benefit heavily from slight rotation, translation, and scaling.
+    self.train_transform = transforms.Compose([
+        transforms.ToPILImage(),
+        transforms.RandomAffine(
+            degrees=15, translate=(0.1, 0.1), scale=(0.9, 1.1)
+        ),
+        transforms.ToTensor(),
+    ])
 
   def __len__(self):
-    # Returns the total number of samples in the dataset
     return len(self.images)
 
   def __getitem__(self, idx):
     image = self.images[idx]
     label = self.labels[idx]
 
-    # FIX: If the image is flattened (784 elements), reshape it back to (28, 28)
+    # Reshape flat 784 arrays back to 28x28 if necessary
     if image.shape == (784,):
       image = image.reshape(28, 28)
 
-    # Preprocessing:
-    # 1. Reshape image from (28, 28) to (1, 28, 28) -> PyTorch CNNs expect (Channels, Height, Width)
-    # 2. Normalize pixel values from [0, 255] to [0.0, 1.0]
-    image = torch.tensor(image, dtype=torch.float32).unsqueeze(0) / 255.0
-    label = torch.tensor(label, dtype=torch.long)
+    # Convert to float32 tensor and add channel dim (1, 28, 28)
+    image_tensor = torch.tensor(image, dtype=torch.float32).unsqueeze(0) / 255.0
 
-    return image, label
+    # Apply data augmentation only during training
+    if self.is_train:
+      # To apply torchvision transforms, we convert temporarily to PIL or use tensor transforms
+      # Here we let our train_transform handle it cleanly:
+      image_pil = transforms.ToPILImage()(image_tensor)
+      image_tensor = self.train_transform(image_pil)
 
+    label_tensor = torch.tensor(label, dtype=torch.long)
+
+    return image_tensor, label_tensor
 
 # Test the dataset if this file is run directly
 if __name__ == '__main__':

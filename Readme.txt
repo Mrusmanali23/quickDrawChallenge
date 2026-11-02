@@ -44,5 +44,12 @@ Optimizer= Updates the model weights to make fewer mistakes next time.
 First Evaluation completed:103500 total samples 
 Top-1 Accuracy=53.86%
 Top-5 Accuracy=73.48%
-
-
+------------------------------------------------------------------------------
+We have applied resnet-18 on it and run 15 epochs 
+with Cross Entropy Loss
+Optimizer= AdamW  lr=0.001, weight_decay=1e-4
+Scheduler=> factor=0.5, patience=2
+Accuracy= 67.06% on 345 complex classes 
+Now after this we will apply Data augmentation techniques to overcome overfitting 
+ON-THE-FLY Data Augmentation
+-------------------------------------------------------------------------------
